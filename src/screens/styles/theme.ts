@@ -1,11 +1,11 @@
  export default{
   colors:{
-    heade: '#1B1B1F',
+    header: '#1B1B1F',
 
     backgroud_primary: '#F4F5F6',
     backgroud_secundary: '#ffffff',
 
-    text: '#7A7A80',
+    text1: '#7A7A80',
     text_detail: '#AEAEB3',
     title: '#47474D',
 
@@ -26,4 +26,4 @@
     Secundary_400: 'Archivo_400Regular',
     Secundary_500:'Archivo_500Medium' ,
     Secundary_600:'Archivo_600SemiBold' ,
- }
+ }}
