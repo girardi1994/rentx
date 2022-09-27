@@ -24,11 +24,11 @@ export default function App() {
     Inter_500Medium,
   });
   if(!fontsLoaded){
-    return  <AppLoading/>;
+    return  <AppLoading/>
   }
   return(
   <ThemeProvider theme={theme}>
-  <Home />;
+  <Home />
   </ThemeProvider>
   )
 }
