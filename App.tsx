@@ -11,7 +11,7 @@ import {
   Inter_400Regular,
   Inter_500Medium,
 } from '@expo-google-fonts/inter';
-import { Scheduling } from "./src/screens/Scheduling";
+import {SchedulingComplete} from './src/screens/SchedulingComplete'
 import theme from "./src/screens/styles/theme";
 
 
@@ -28,7 +28,7 @@ export default function App() {
   }
   return(
   <ThemeProvider theme={theme}>
-  <Scheduling />
+  <SchedulingComplete />
   </ThemeProvider>
   )
 }
