@@ -7,7 +7,7 @@ import {
 
 interface Props{
   title: string;
-  color?: string;
+  color?: string; 
   onPress: () => void; 
 
 }
@@ -20,7 +20,6 @@ export function Button({
    return (
      <Container {...rest} color={color}>
       <Title>{title}</Title>
-
      </Container>
   );
 }

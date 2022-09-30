@@ -14,7 +14,7 @@ interface Props{
 export function Accessory({
   name,
   icon: Icon,
-}) : Props{
+} : Props){
    return (
      <Container>
       <Icon width={32} height={32}/>
