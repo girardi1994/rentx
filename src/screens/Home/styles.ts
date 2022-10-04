@@ -25,7 +25,7 @@ align-items: center;
 flex-direction: row;
 justify-content: space-between;
 `;
-export const CarList = styled(FlatList as new () => flatlist<CarDTO>).attrs({
+export const CarList = styled(FlatList as new () => FlatList<CarDTO>).attrs({
   contentContainerStyle:{
     padding: 24
   },

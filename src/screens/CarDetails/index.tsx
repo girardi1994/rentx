@@ -3,14 +3,9 @@ import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
 import { Accessory } from "../../components/Accessory";
 import { Button } from "../../components/Button";
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-import SpeedSvg from '../../assets/speed.svg'
-import AccelerationSvg from '../../assets/acceleration.svg'
-import ForceSvg from '../../assets/force.svg'
-import GasolineSvg from '../../assets/gasoline.svg'
-import PeopleSvg from '../../assets/people.svg'
-import ExchangeSvg from '../../assets/exchange.svg'
+import { getAccessoryItem } from "../../Utils/getAccessoryIcon";
 
 import {
   Container,
@@ -28,52 +23,62 @@ import {
   Accessories,
   Footer,
 } from "./styles";
+import { CarDTO } from "../../components/dtos/CarDTO";
+
+interface Params {
+  car: CarDTO;
+}
 
 export function CarDetails() {
   const navigation = useNavigation();
-  
-  function handleConfirmCar(){
-    navigation.navigate('Scheduling');
+  const route = useRoute();
+  const { car } = route.params as Params;
+
+  function handleConfirmCar() {
+    navigation.navigate("Scheduling");
+  }
+  function handleBack() {
+    navigation.goBack();
   }
 
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={handleBack} />
       </Header>
       <CarImages>
-        <ImageSlider
-          imageUrl={[
-            "https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png",
-          ]}
-        />
+        <ImageSlider imageUrl={car.photos} />
       </CarImages>
 
       <Content>
         <Details>
           <Descripton>
-            <Brand>Lamborghini</Brand>
-            <Name>Huracan</Name>
+            <Brand>{car.brand}</Brand>
+            <Name>{car.name}</Name>
           </Descripton>
 
           <Rent>
-            <Period>AO DIA</Period>
-            <Price>R$ 580</Price>
+            <Period>{car.rent.period}</Period>
+            <Price>R$ {car.rent.price}</Price>
           </Rent>
         </Details>
         <Accessories>
-          <Accessory name='380Km/h' icon={SpeedSvg}/>
-          <Accessory name='3.2' icon={AccelerationSvg}/>
-          <Accessory name='800 HP' icon={ForceSvg}/>
-          <Accessory name='Gasolina' icon={GasolineSvg}/>
-          <Accessory name='Auto' icon={ExchangeSvg}/>
-          <Accessory name='2 Pessoas' icon={PeopleSvg}/>
+          {car.accessories.map((accessory) => (
+            <Accessory
+              key={accessory.type}
+              name={accessory.name}
+              icon={getAccessoryItem(accessory.type)}
+            />
+          ))}
         </Accessories>
-        <About>Texto aqui</About>
+        <About>{car.about}</About>
       </Content>
 
       <Footer>
-        <Button title="Escolher Período de aluguel" onPress={handleConfirmCar}/>
+        <Button
+          title="Escolher Período de aluguel"
+          onPress={handleConfirmCar}
+        />
       </Footer>
     </Container>
   );
