@@ -6,16 +6,10 @@ import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
 import { Accessory } from "../../components/Accessory";
 import { Button } from "../../components/Button";
-import {useNavigation} from '@react-navigation/native'
-import {theme} from '../styles'
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {theme} from '../styles';
 
-import SpeedSvg from "../../assets/speed.svg";
-import AccelerationSvg from "../../assets/acceleration.svg";
-import ForceSvg from "../../assets/force.svg";
-import GasolineSvg from "../../assets/gasoline.svg";
-import PeopleSvg from "../../assets/people.svg";
-import ExchangeSvg from "../../assets/exchange.svg";
-
+import {getAccessoryIcon} from '../../Utils/getAccessoryIcon';
 import {
   Container,
   Header,
@@ -41,18 +35,29 @@ import {
   RendalPriceQuota,
   RentalPriceTotal,
 } from "./styles";
+import { CarDTO } from "../../components/dtos/CarDTO";
+
+interface Params {
+  car: CarDTO;
+}
 
 export function SchedulingDetails() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const route = useRoute();
+  const { car } = route.params as Params;
 
   function handleConfirmDetails(){
     navigation.navigate('SchedulingComplete')
   }
+
+  function handleBack() {
+    navigation.goBack();
+  }
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={handleBack} />
       </Header>
       <CarImages>
         <ImageSlider
@@ -75,12 +80,14 @@ export function SchedulingDetails() {
           </Rent>
         </Details>
         <Accessories>
-          <Accessory name="380Km/h" icon={SpeedSvg} />
-          <Accessory name="3.2" icon={AccelerationSvg} />
-          <Accessory name="800 HP" icon={ForceSvg} />
-          <Accessory name="Gasolina" icon={GasolineSvg} />
-          <Accessory name="Auto" icon={ExchangeSvg} />
-          <Accessory name="2 Pessoas" icon={PeopleSvg} />
+          car.accessoty.map(accessory => (
+            <Accessory 
+              key={accessory.type}
+              name={accessory.name}
+              icon={getAccessoryIcon(accessory.type)} 
+              />
+          ))
+         
         </Accessories>
 
         <RentalPeriod>
