@@ -26,7 +26,7 @@ import {
   Footer,
 } from "./styles";
 
-interface RentalPeriod {
+interface IRentalPeriod {
   startFormatted: string;
   endFormatted: string;
 }
@@ -41,8 +41,8 @@ export function Scheduling() {
   const [markedDates, setMarkedDates] = useState<MarkedDateProps>(
     {} as MarkedDateProps
   );
-  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
-    {} as RentalPeriod
+  const [rentalPeriod, setRentalPeriod] = useState<IRentalPeriod>(
+    {} as IRentalPeriod
   );
 
   const theme = useTheme();
@@ -60,30 +60,38 @@ export function Scheduling() {
       });
     }
   }
+
   function handleBack() {
     navigation.goBack();
   }
+
   function handleChangeDate(date: DayProps) {
-    console.log(date);
     let start = !lastSelectedDate.timestamp ? date : lastSelectedDate;
     let end = date;
 
-    if (start.timestamp > end.timestamp){
+    
+
+    if (start.timestamp > end.timestamp) {
       start = end;
       end = start;
     }
     setLastSelectedDate(end);
     const interval = generateInterval(start, end);
+
     setMarkedDates(interval);
 
     const firstDate = Object.keys(interval)[0];
-    const endDate = Object.keys(interval)[Object.keys(interval).length - 1];
+    const endDate = Object.keys(interval)[Object.keys(interval).length -1];
 
     setRentalPeriod({
-      startFormatted: format(getPlataformDate(new Date(firstDate),'dd/MM/yyyy')),
-      endFormatted: format(getPlataformDate(new Date(endDate),'dd/MM/yyyy')),
-    })
+      startFormatted: format(
+        getPlataformDate(new Date(firstDate)),
+        "dd/MM/yyyy"
+      ),
+      endFormatted: format(getPlataformDate(new Date(endDate)), "dd/MM/yyyy"),
+    });
   }
+
   return (
     <Container>
       <Header>

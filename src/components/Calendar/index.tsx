@@ -5,6 +5,7 @@ import { generateInterval } from "./generateInterval";
 import {
   Calendar as CustomCalendar,
   LocaleConfig,
+  
 } from "react-native-calendars";
 
 LocaleConfig.locales["pt-br"] = {
@@ -46,7 +47,7 @@ LocaleConfig.locales["pt-br"] = {
     "Sábado",
   ],
   dayNamesShort: ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"],
-  today: "Hoje",
+  today: ["Hoje"],
 };
 LocaleConfig.defaultLocale = "pt-br";
 
@@ -60,7 +61,7 @@ interface MarkedDateProps {
 }
 interface CalendarProps {
   marketDates: MarkedDateProps;
-  onDayPress: (date: Date) => void
+  onDayPress: any
 }
 interface DayProps {
   dateString: string;
@@ -96,14 +97,14 @@ function Calendar({ marketDates, onDayPress }: CalendarProps) {
         textMonthFontSize: 20,
         monthTextColor: theme.colors.title,
         arrowStyle: {
-          marginHorizontal: -15,
+        marginHorizontal: -15,
         },
       }}
       firstDay={1}
       minDate={new Date().toString()}
       markingType="period"
       markedDates={marketDates}
-      onDayLongPress={(e) => console.log("õnDayPress", e)}
+      onDayPress={onDayPress}
     />
   );
 }
