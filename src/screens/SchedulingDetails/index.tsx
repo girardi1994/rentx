@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useTheme } from "styled-components";
@@ -6,11 +6,10 @@ import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
 import { Accessory } from "../../components/Accessory";
 import { Button } from "../../components/Button";
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { format } from "date-fns";
 
-
-import {getAccessoryItem} from '../../Utils/getAccessoryIcon';
+import { getAccessoryItem } from "../../Utils/getAccessoryIcon";
 import {
   Container,
   Header,
@@ -38,20 +37,22 @@ import {
 } from "./styles";
 import { CarDTO } from "../../components/dtos/CarDTO";
 import { getPlataformDate } from "../../Utils/getPlataformDate";
-import {api} from '../../Services/api';
+import api from "../../Services/api";
 import { Alert } from "react-native";
 
 interface Params {
   car: CarDTO;
   dates: string[];
 }
-interface RentalPeriod{
+interface RentalPeriod {
   start: string;
   end: string;
 }
 
 export function SchedulingDetails() {
-  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>({} as RentalPeriod);
+  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
+    {} as RentalPeriod
+  );
   const theme = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
@@ -59,22 +60,26 @@ export function SchedulingDetails() {
 
   const rentTotal = Number(dates.length * car.rent.price);
 
-  async function handleConfirmDetails(){
-    const schedulesByCar = await api.get(`/schedules/${car.id}`);
+  async function handleConfirmDetails() {
+    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
 
-    const unavailable_dates =[
-      ...schedulesByCar.date.unavailable_dates,
+    const unavailable_dates = [
+      ...schedulesByCar.data.unavailable_dates,
       ...dates,
     ];
 
-    api.push(`/schedules/${car.id}`,{
-      id: car.id,
-      unavailable_dates
-    })
-    .then(() => navigation.navigate('SchedulingComplete'))
-    .catch(()=> Alert.alert('Não foi possível confirmar o agendamento.'))
+    await api.post("schedules_byuser", {
+      user_id: 1,
+      car,
+    });
 
-    
+    api
+      .put(`/schedules_bycars/${car.id}`, {
+        id: car.id,
+        unavailable_dates,
+      })
+      .then(() => navigation.navigate("SchedulingComplete"))
+      .catch(() => Alert.alert("Não foi possível confirmar o agendamento."));
   }
 
   function handleBack() {
@@ -82,19 +87,20 @@ export function SchedulingDetails() {
   }
   useEffect(() => {
     setRentalPeriod({
-      start: format(getPlataformDate(new Date(dates[0])),'dd/MM/yyyy'),
-      end: format(getPlataformDate(new Date(dates[dates.length -1])),'dd/MM/yyyy'),
-    })
-  },[])
+      start: format(getPlataformDate(new Date(dates[0])), "dd/MM/yyyy"),
+      end: format(
+        getPlataformDate(new Date(dates[dates.length - 1])),
+        "dd/MM/yyyy"
+      ),
+    });
+  }, []);
   return (
     <Container>
       <Header>
         <BackButton onPress={handleBack} />
       </Header>
       <CarImages>
-        <ImageSlider
-          imageUrl={car.photos}
-        />
+        <ImageSlider imageUrl={car.photos} />
       </CarImages>
 
       <Content>
@@ -110,15 +116,13 @@ export function SchedulingDetails() {
           </Rent>
         </Details>
         <Accessories>
-          {
-          car.accessories.map(accessory => (
-            <Accessory 
+          {car.accessories.map((accessory) => (
+            <Accessory
               key={accessory.type}
               name={accessory.name}
-              icon={getAccessoryItem(accessory.type)} 
-              />
-          ))
-        }
+              icon={getAccessoryItem(accessory.type)}
+            />
+          ))}
         </Accessories>
 
         <RentalPeriod>
@@ -152,7 +156,11 @@ export function SchedulingDetails() {
         </RentalPrice>
       </Content>
       <Footer>
-        <Button title="Alugar agora" color={theme.colors.seccess} onPress={handleConfirmDetails}/>
+        <Button
+          title="Alugar agora"
+          color={theme.colors.seccess}
+          onPress={handleConfirmDetails}
+        />
       </Footer>
     </Container>
   );
