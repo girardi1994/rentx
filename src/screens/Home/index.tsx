@@ -48,7 +48,7 @@ export function Home() {
       <Header>
         <HeaderContent>
           <Logo width={RFValue(108)} height={RFValue(12)} />
-          <TotalCars>Total 12 Carros</TotalCars>
+          <TotalCars>Total 06 Carros</TotalCars>
         </HeaderContent>
       </Header>
       {loading ? (
